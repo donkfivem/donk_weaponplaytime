@@ -1,6 +1,5 @@
-local RESTRICTION_TIME = Config.RestrictionTime * 60 * 60 -- Convert hours to seconds
+local RESTRICTION_TIME = Config.RestrictionTime * 60 * 60
 
--- Framework Detection
 local Framework = nil
 local FrameworkName = Config.Framework
 
@@ -9,11 +8,9 @@ if FrameworkName == 'esx' then
 elseif FrameworkName == 'qbcore' then
     Framework = exports['qb-core']:GetCoreObject()
 elseif FrameworkName == 'qbx' then
-    -- QBX uses exports directly, no need to get core object
     Framework = 'qbx'
 end
 
--- Get Player Function
 local function GetPlayer(source)
     if FrameworkName == 'esx' then
         return Framework.GetPlayerFromId(source)
@@ -25,7 +22,6 @@ local function GetPlayer(source)
     return nil
 end
 
--- Get Player Identifier
 local function GetPlayerIdentifier(Player)
     if FrameworkName == 'esx' then
         return Player.identifier
@@ -35,7 +31,6 @@ local function GetPlayerIdentifier(Player)
     return nil
 end
 
--- Get Database Settings
 local function GetDatabaseSettings()
     if FrameworkName == 'esx' then
         return Config.Database.ESX
@@ -85,7 +80,6 @@ lib.callback.register('weaponRestriction:canUseWeapon', function(source)
     return false, hours, minutes
 end)
 
--- Database Initialization
 MySQL.ready(function()
     local dbSettings = GetDatabaseSettings()
 
@@ -101,7 +95,6 @@ MySQL.ready(function()
     end
 end)
 
--- Debug Information
 if Config.Debug then
     print(string.format('[Weapon Playtime] Framework: %s', FrameworkName))
     print(string.format('[Weapon Playtime] Restriction Time: %d hours', Config.RestrictionTime))

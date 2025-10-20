@@ -1,7 +1,6 @@
 local isRestricted = true
 local checkingWeapon = false
 
--- Notification Helper Function
 local function SendNotification(title, description, type, duration)
     if not Config.Notifications.enabled then return end
 
@@ -23,7 +22,6 @@ local function SendNotification(title, description, type, duration)
     end
 end
 
--- Get Current Weapon Function
 local function GetCurrentWeapon()
     if Config.Inventory == 'ox_inventory' then
         return exports.ox_inventory:getCurrentWeapon()
@@ -32,7 +30,6 @@ local function GetCurrentWeapon()
         local weapon = GetSelectedPedWeapon(ped)
         return weapon ~= `WEAPON_UNARMED` and weapon or nil
     elseif Config.Inventory == 'custom' then
-        -- Add your custom inventory check here
         local ped = PlayerPedId()
         local weapon = GetSelectedPedWeapon(ped)
         return weapon ~= `WEAPON_UNARMED` and weapon or nil
@@ -40,7 +37,6 @@ local function GetCurrentWeapon()
     return nil
 end
 
--- Disarm Function
 local function DisarmPlayer()
     if Config.Inventory == 'ox_inventory' then
         TriggerEvent('ox_inventory:disarm', true)
@@ -48,13 +44,11 @@ local function DisarmPlayer()
         local ped = PlayerPedId()
         SetCurrentPedWeapon(ped, `WEAPON_UNARMED`, true)
     elseif Config.Inventory == 'custom' then
-        -- Add your custom disarm code here
         local ped = PlayerPedId()
         SetCurrentPedWeapon(ped, `WEAPON_UNARMED`, true)
     end
 end
 
--- Main restriction check thread
 CreateThread(function()
     while true do
         Wait(Config.CheckIntervals.mainCheck)
@@ -68,7 +62,6 @@ CreateThread(function()
     end
 end)
 
--- Weapon check thread
 CreateThread(function()
     while true do
         Wait(Config.CheckIntervals.weaponCheck)
@@ -102,7 +95,6 @@ CreateThread(function()
     end
 end)
 
--- Periodic check for restriction lift
 CreateThread(function()
     while isRestricted do
         Wait(Config.CheckIntervals.periodicCheck)
@@ -119,7 +111,6 @@ CreateThread(function()
     end
 end)
 
--- Debug Information
 if Config.Debug then
     print('[Weapon Playtime] Client initialized')
     print(string.format('[Weapon Playtime] Inventory System: %s', Config.Inventory))
